@@ -1,0 +1,10 @@
+{
+  "type": "neo_tech:hard_anvil",
+  "inputItem": [
+    { "item": "minecraft:coal" }
+  ],
+  "outputItem": {
+    "item": "minecraft:diamond",
+    "count": 1
+  }
+}
