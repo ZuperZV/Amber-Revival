@@ -1,4 +1,4 @@
-/*package net.zuperz.amber_revival.datagen;
+package net.zuperz.amber_revival.datagen;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -14,6 +14,8 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.zuperz.amber_revival.block.ModBlocks;
+import net.zuperz.amber_revival.item.ModItems;
 
 import java.util.Set;
 
@@ -24,6 +26,12 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+
+        dropSelf(ModBlocks.AMBER_DISPLAY.get());
+        dropSelf(ModBlocks.FOSSIL_BREAKER.get());
+
+        this.add(ModBlocks.AMBER_SAND_ORE.get(),
+                block -> createMultipleOreDrops(ModBlocks.AMBER_SAND_ORE.get(), ModItems.AMBER.get(), 1, 2));
     }
 
     protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {
@@ -39,4 +47,3 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         return ModBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
     }
 }
- */

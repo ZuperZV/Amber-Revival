@@ -1,16 +1,11 @@
 package net.zuperz.amber_revival.item;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zuperz.amber_revival.AmberRevival;
 import net.zuperz.amber_revival.item.custom.ResinItem;
-
-import java.util.Arrays;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS =

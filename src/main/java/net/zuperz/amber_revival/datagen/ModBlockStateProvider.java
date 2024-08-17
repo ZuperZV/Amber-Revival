@@ -1,4 +1,4 @@
-/*package net.zuperz.amber_revival.datagen;
+package net.zuperz.amber_revival.datagen;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -7,6 +7,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.zuperz.amber_revival.AmberRevival;
+import net.zuperz.amber_revival.block.ModBlocks;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -15,14 +16,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.STEEL_BLOCK);
-        blockWithItem(ModBlocks.RAW_STEEL_BLOCK);
+        blockWithItem(ModBlocks.AMBER_SAND_ORE);
 
-        blockWithItem(ModBlocks.STEEL_ORE);
-        blockWithItem(ModBlocks.STEEL_DEEPSLATE_ORE);
-
-        horizontalBlock(ModBlocks.HARD_ANVIL.get(),
-                new ModelFile.UncheckedModelFile(modLoc("block/hard_anvil")));
+        horizontalBlock(ModBlocks.AMBER_DISPLAY.get(),
+                new ModelFile.UncheckedModelFile(modLoc("block/amber_display")));
     }
 
     private void blockWithItem(DeferredBlock<Block> deferredBlock) {
@@ -30,11 +27,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void blockItem(DeferredBlock<Block> deferredBlock) {
-        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("neo_tech:block/" + deferredBlock.getId().getPath()));
+        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("amber_recival:block/" + deferredBlock.getId().getPath()));
     }
 
     private void blockItem(DeferredBlock<Block> deferredBlock, String appendix) {
-        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("neo_tech:block/" + deferredBlock.getId().getPath() + appendix));
+        simpleBlockItem(deferredBlock.get(), new ModelFile.UncheckedModelFile("amber_recival:block/" + deferredBlock.getId().getPath() + appendix));
     }
 }
- */

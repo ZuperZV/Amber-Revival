@@ -1,8 +1,10 @@
 package net.zuperz.amber_revival.datagen;
 
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
@@ -19,8 +21,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput pRecipeOutput) {
+    protected void buildRecipes(RecipeOutput pWriter) {
 
+        SimpleCookingRecipeBuilder.blasting (Ingredient.of(ModItems.RESIN.get()), RecipeCategory.MISC , ModItems.AMBER.get(), 0.15f , 200)
+                .unlockedBy("has_crushed_nether_quartz",inventoryTrigger(ItemPredicate.Builder.item().of(ModItems.RESIN.get()).build()))
+                .save(pWriter, ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "resin"));
 
     }
 
