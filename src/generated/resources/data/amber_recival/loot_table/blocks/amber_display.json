@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "amber_recival:amber_display"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "amber_recival:blocks/amber_display"
+}

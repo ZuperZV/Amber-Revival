@@ -1,0 +1,4 @@
+// 1.21	2024-08-18T17:31:32.8941611	Registries
+db3187dee0b0435278b197e1a4ffa1db97d1606f data/amber_recival/neoforge/biome_modifier/add_amber_sand_ore.json
+4815dc590d91f17ac350b54e986bb11c59706c60 data/amber_recival/worldgen/configured_feature/amber_sand_ore.json
+da3610b950e4a4ccc89824431e5e066d7cbc0a96 data/amber_recival/worldgen/placed_feature/amber_sand_ore_placed.json
