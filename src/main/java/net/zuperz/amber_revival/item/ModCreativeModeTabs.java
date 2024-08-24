@@ -1,15 +1,13 @@
-package net.zuperz.amber_revival.item.custom;
+package net.zuperz.amber_revival.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zuperz.amber_revival.AmberRevival;
 import net.zuperz.amber_revival.block.ModBlocks;
-import net.zuperz.amber_revival.item.ModItems;
 
 import java.util.function.Supplier;
 
@@ -28,6 +26,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.AMBER_SAND_ORE);
                         pOutput.accept(ModBlocks.AMBER_DISPLAY);
                         pOutput.accept(ModBlocks.FOSSIL_BREAKER);
+
+                        pOutput.accept(ModItems.RAPTOR_SPAWN_EGG);
                     }).build());
 
     public static void register(IEventBus eventBus) {

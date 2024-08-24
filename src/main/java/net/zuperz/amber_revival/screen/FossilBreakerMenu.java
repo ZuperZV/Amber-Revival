@@ -1,5 +1,6 @@
 package net.zuperz.amber_revival.screen;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -9,36 +10,79 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import net.zuperz.amber_revival.AmberRevival;
 import net.zuperz.amber_revival.block.ModBlocks;
 import net.zuperz.amber_revival.block.entity.custom.FossilBreakerBlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 public class FossilBreakerMenu extends AbstractContainerMenu {
-    public final FossilBreakerBlockEntity blockEntity;
-    private final Level level;
+    private final FossilBreakerBlockEntity blockEntity;
     private final ContainerData data;
 
-    public FossilBreakerMenu(int containerId, Inventory playerInv, FriendlyByteBuf extraData) {
-        this(containerId,playerInv,playerInv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+    // Constructor used on the client
+    public FossilBreakerMenu(int id, Inventory inv, FriendlyByteBuf buf) {
+        this(id, inv, buf != null ? inv.player.level().getBlockEntity(buf.readBlockPos()) : null, new SimpleContainerData(3));
     }
 
-
+    // Constructor used on the server
     public FossilBreakerMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.FOSSIL_BREAKER_MENU.get(), id);
-        checkContainerSize(inv, 3);
-        blockEntity = (FossilBreakerBlockEntity) entity;
-        this.level = inv.player.level();
+        FossilBreakerBlockEntity blockEntity1;
+        checkContainerSize(inv, 3); // Assuming 3 slots
+        blockEntity1 = (FossilBreakerBlockEntity) entity;
         this.data = data;
 
+        if (entity instanceof FossilBreakerBlockEntity) {
+        } else {
+            throw new IllegalStateException("Unexpected BlockEntity");
+        }
+
+        // Add the custom slots (2 inputs, 1 output)
+        this.blockEntity = blockEntity1;
+        ItemStackHandler itemHandler = (ItemStackHandler) blockEntity.getItemHandler();
+        this.addSlot(new SlotItemHandler(itemHandler, 0, 56, 17)); // Input Slot 1
+        this.addSlot(new SlotItemHandler(itemHandler, 1, 56, 53)); // Input Slot 2
+        this.addSlot(new SlotItemHandler(itemHandler, 2, 116, 35)); // Output Slot
+
+        // Add the player's inventory slots
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        ItemStackHandler itemHandler = (ItemStackHandler) this.blockEntity.getItemHandler();
+        // Add data synchronization
+        this.addDataSlots(data);
+    }
 
-        this.addSlot(new SlotItemHandler(itemHandler, 0, 12, 15));
-        this.addSlot(new SlotItemHandler(itemHandler, 1, 86, 15));
-        this.addSlot(new SlotItemHandler(itemHandler, 2, 86, 60));
+    @Override
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), player, ModBlocks.FOSSIL_BREAKER.get());
+    }
 
-    //    addDataSlots(data);
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+
+            if (index < 3) {
+                if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+
+        return itemstack;
     }
 
     public boolean isCrafting() {
@@ -47,82 +91,24 @@ public class FossilBreakerMenu extends AbstractContainerMenu {
 
     public int getScaledProgress() {
         int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
+        int maxProgress = this.data.get(1);
+        int progressArrowSize = 26;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
-    // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
-    // must assign a slot number to each of the slots used by the GUI.
-    // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
-    // Each time we add a Slot to the container, it automatically increases the slotIndex, which means
-    //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
-    //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
-    //  36 - 44 = TileInventory slots, which map to our TileEntity slot numbers 0 - 8)
-    private static final int HOTBAR_SLOT_COUNT = 9;
-    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-
-    // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
-    @Override
-    public ItemStack quickMoveStack(Player playerIn, int pIndex) {
-        Slot sourceSlot = slots.get(pIndex);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
-
-        // Check if the slot clicked is one of the vanilla container slots
-        if (pIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the tile inventory
-            if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-                    + TE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;  // EMPTY_ITEM
-            }
-        } else if (pIndex < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
-            // This is a TE slot so merge the stack into the players inventory
-            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            System.out.println("Invalid slotIndex:" + pIndex);
-            return ItemStack.EMPTY;
-        }
-        // If stack size == 0 (the entire stack was moved) set slot contents to null
-        if (sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
-        } else {
-            sourceSlot.setChanged();
-        }
-        sourceSlot.onTake(playerIn, sourceStack);
-        return copyOfSourceStack;
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
-    }
-
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
-            for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
     }
-
-    public BlockEntity getBlockEntity() {
-        return blockEntity;
-    }
 }
+

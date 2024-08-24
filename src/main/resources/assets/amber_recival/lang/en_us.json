@@ -14,5 +14,10 @@
   "block.amber_recival.amber_sand_ore": "Amber Sand Ore",
   "block.amber_recival.fossil_breaker": "Fossil Breaker",
 
-  "item.amber_recival.slime_amber": "Amber Coated Slime"
+  "item.amber_recival.slime_amber": "Amber Encased Slime",
+  "item.amber_recival.amber_raptor_skull": "Amber Encased Raptor Skull",
+
+  "item.amber_recival.raptor_skull": "Raptor Skull",
+  "item.amber_recival.raptor_spawn_egg": "Raptor Spawn Egg",
+  "entity.amber_recival.raptor": "Raptor"
 }

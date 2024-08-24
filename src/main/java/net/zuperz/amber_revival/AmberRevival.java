@@ -1,7 +1,7 @@
 package net.zuperz.amber_revival;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
@@ -9,12 +9,13 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.zuperz.amber_revival.Config;
 import net.zuperz.amber_revival.block.ModBlocks;
 import net.zuperz.amber_revival.block.entity.ModBlockEntities;
 import net.zuperz.amber_revival.block.entity.renderer.AmberDisplayBlockEntityRenderer;
+import net.zuperz.amber_revival.entity.ModEntities;
+import net.zuperz.amber_revival.entity.client.RaptorRenderer;
 import net.zuperz.amber_revival.item.ModItems;
-import net.zuperz.amber_revival.item.custom.ModCreativeModeTabs;
+import net.zuperz.amber_revival.item.ModCreativeModeTabs;
 import net.zuperz.amber_revival.recipe.ModRecipes;
 import net.zuperz.amber_revival.screen.FossilBreakerScreen;
 import net.zuperz.amber_revival.screen.ModMenuTypes;
@@ -48,6 +49,8 @@ public class AmberRevival {
         ModRecipes.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+
+        ModEntities.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
@@ -90,6 +93,7 @@ public class AmberRevival {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            EntityRenderers.register(ModEntities.RAPTOR.get(), RaptorRenderer::new);
         }
 
         @SubscribeEvent

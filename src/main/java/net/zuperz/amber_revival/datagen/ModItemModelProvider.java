@@ -20,7 +20,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.AMBER.get());
         basicItem(ModItems.RESIN.get());
 
-        amberItem(ModItems.SLIME_AMBER);
+        smallAmberItem(ModItems.SLIME_AMBER);
+        bigAmberItem(ModItems.AMBER_RAPTOR_SKULL);
+
+        basicItem(ModItems.RAPTOR_SKULL.get());
+        withExistingParent(ModItems.RAPTOR_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }
 
     private ItemModelBuilder handheldItem(DeferredItem<Item> item) {
@@ -33,6 +37,20 @@ public class ModItemModelProvider extends ItemModelProvider {
         return withExistingParent(item.getId().getPath(),
                 ResourceLocation.parse("item/generated"))
                 .texture("layer0", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/amber"))
+                .texture("layer1", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/" + item.getId().getPath()));
+    }
+
+    private ItemModelBuilder smallAmberItem(DeferredItem<Item> item) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.parse("item/generated"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/small_amber"))
+                .texture("layer1", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/" + item.getId().getPath()));
+    }
+
+    private ItemModelBuilder bigAmberItem(DeferredItem<Item> item) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.parse("item/generated"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/big_amber"))
                 .texture("layer1", ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "item/" + item.getId().getPath()));
     }
 

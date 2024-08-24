@@ -97,7 +97,7 @@ public class FossilBreakerBlock extends BaseEntityBlock {
         } else {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
             if (blockentity instanceof FossilBreakerBlockEntity) {
-                pPlayer.openMenu((FossilBreakerBlockEntity)blockentity);
+                pPlayer.openMenu((FossilBreakerBlockEntity) blockentity);
             }
 
             return ItemInteractionResult.CONSUME;
@@ -111,7 +111,7 @@ public class FossilBreakerBlock extends BaseEntityBlock {
         } else {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
             if (blockentity instanceof FossilBreakerBlockEntity) {
-                pPlayer.openMenu((FossilBreakerBlockEntity)blockentity);
+                pPlayer.openMenu((FossilBreakerBlockEntity) blockentity);
             }
 
             return InteractionResult.CONSUME;

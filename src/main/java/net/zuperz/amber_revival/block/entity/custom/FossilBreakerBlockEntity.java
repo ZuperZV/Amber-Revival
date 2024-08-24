@@ -34,7 +34,7 @@ public class FossilBreakerBlockEntity extends BlockEntity implements MenuProvide
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
         protected void onContentsChanged(int slot) {
-            setChanged();
+            setChanged(); // Mark the block entity as changed whenever the contents change
         }
 
         @Override
@@ -77,7 +77,7 @@ public class FossilBreakerBlockEntity extends BlockEntity implements MenuProvide
 
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
     }
@@ -96,14 +96,9 @@ public class FossilBreakerBlockEntity extends BlockEntity implements MenuProvide
         return Component.literal("Rotten Cauldron");
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        BlockEntity blockEntity = player.level().getBlockEntity(player.getOnPos());
-        if (blockEntity instanceof FossilBreakerBlockEntity) {
-            return new FossilBreakerMenu(containerId, playerInventory, blockEntity, new SimpleContainerData(2));
-        }
-        return null;
+    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+        return new FossilBreakerMenu(containerId, playerInventory, this, this.data);
     }
 
     public @Nullable IItemHandler getItemHandlerCapability(@Nullable Direction side) {

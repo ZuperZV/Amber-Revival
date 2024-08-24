@@ -15,7 +15,7 @@ public class ModMenuTypes {
     public static DeferredRegister<MenuType<?>> MENU_TYPES =
             DeferredRegister.create(Registries.MENU, AmberRevival.MOD_ID);
 
-    public static final DeferredHolder<MenuType<?>,MenuType<FossilBreakerMenu>> FOSSIL_BREAKER_MENU =
+    public static final DeferredHolder<MenuType<?>, MenuType<FossilBreakerMenu>> FOSSIL_BREAKER_MENU =
             registerMenuType(FossilBreakerMenu::new, "fossil_breaker_menu");
 
     private static <T extends AbstractContainerMenu>
