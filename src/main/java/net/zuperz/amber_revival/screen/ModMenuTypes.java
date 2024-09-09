@@ -1,5 +1,6 @@
 package net.zuperz.amber_revival.screen;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -10,21 +11,17 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zuperz.amber_revival.AmberRevival;
 
+import java.util.function.Supplier;
+
 
 public class ModMenuTypes {
-    public static DeferredRegister<MenuType<?>> MENU_TYPES =
-            DeferredRegister.create(Registries.MENU, AmberRevival.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(BuiltInRegistries.MENU, AmberRevival.MOD_ID);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<FossilBreakerMenu>> FOSSIL_BREAKER_MENU =
-            registerMenuType(FossilBreakerMenu::new, "fossil_breaker_menu");
+    public static final Supplier<MenuType<FossilBreakerMenu>> FOSSIL_BREAKER_MENU = MENUS.register("fossil_breaker_menu",
+            () -> IMenuTypeExtension.create((windowId, inv, data) -> new FossilBreakerMenu(windowId, inv.player, data.readBlockPos())));
 
-    private static <T extends AbstractContainerMenu>
-    DeferredHolder<MenuType<?>,MenuType<T>> registerMenuType(IContainerFactory<T> factory, String name)
-    {
-        return MENU_TYPES.register(name, () -> IMenuTypeExtension.create(factory));
-    }
 
     public static void register(IEventBus eventBus) {
-        MENU_TYPES.register(eventBus);
+        MENUS.register(eventBus);
     }
 }

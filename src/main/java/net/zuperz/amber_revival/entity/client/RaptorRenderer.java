@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.WolfArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.zuperz.amber_revival.AmberRevival;
 import net.zuperz.amber_revival.entity.custom.RaptorEntity;
@@ -24,8 +25,9 @@ public class RaptorRenderer extends MobRenderer<RaptorEntity, RaptorModel<Raptor
             });
 
     public RaptorRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext, new RaptorModel<>(pContext.bakeLayer(ModModelLayers.RAPTOR)), 0.75f); // Changed the model type
-        this.addLayer(new RaptorHeldItemLayer(this, pContext.getItemInHandRenderer())); // No change needed here
+        super(pContext, new RaptorModel<>(pContext.bakeLayer(ModModelLayers.RAPTOR)), 0.55f);
+        this.addLayer(new RaptorHeldItemLayer(this, pContext.getItemInHandRenderer()));
+        this.addLayer(new RaptorArmorLayer(this, pContext.getModelSet()));
     }
 
     @Override

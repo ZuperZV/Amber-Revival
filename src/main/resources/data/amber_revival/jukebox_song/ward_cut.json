@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.amber_revival.ward_cut_music_disc.desc"
+  },
+  "length_in_seconds": 69.0,
+  "sound_event": "amber_revival:ward_cut"
+}

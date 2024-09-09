@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raptor_chops": {
+      "conditions": {
+        "items": [
+          {
+            "items": "amber_revival:raptor_chops"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "amber_revival:cooked_raptor_chops_from_smelting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raptor_chops"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "amber_revival:cooked_raptor_chops_from_smelting"
+    ]
+  }
+}

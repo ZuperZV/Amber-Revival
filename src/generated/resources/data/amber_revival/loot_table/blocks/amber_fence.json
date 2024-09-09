@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "amber_revival:amber_fence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "amber_revival:blocks/amber_fence"
+}

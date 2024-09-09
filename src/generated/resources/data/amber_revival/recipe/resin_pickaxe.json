@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:stick"
+    },
+    "B": {
+      "item": "amber_revival:resin"
+    }
+  },
+  "pattern": [
+    "BBB",
+    " A ",
+    " A "
+  ],
+  "result": {
+    "count": 1,
+    "id": "amber_revival:resin_pickaxe"
+  }
+}

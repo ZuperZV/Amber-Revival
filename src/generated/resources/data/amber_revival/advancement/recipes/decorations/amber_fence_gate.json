@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amber_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "amber_revival:amber_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "amber_revival:amber_fence_gate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amber_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "amber_revival:amber_fence_gate"
+    ]
+  }
+}

@@ -1,5 +1,8 @@
 package net.zuperz.amber_revival.event;
 
+import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -14,11 +17,16 @@ import net.zuperz.amber_revival.entity.client.ModModelLayers;
 import net.zuperz.amber_revival.entity.client.RaptorModel;
 import net.zuperz.amber_revival.entity.custom.RaptorEntity;
 
+import java.util.function.Supplier;
+
 @EventBusSubscriber(modid = AmberRevival.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(ModModelLayers.RAPTOR, RaptorModel::createBodyLayer);
+
+        event.registerLayerDefinition(ModModelLayers.RAPTOR, () -> RaptorModel.createBodyLayer(new CubeDeformation(0.0F)));
+
+        event.registerLayerDefinition(ModModelLayers.RAPTOR_ARMOR, () -> RaptorModel.createBodyLayer(new CubeDeformation(0.0F)));
     }
 
     @SubscribeEvent

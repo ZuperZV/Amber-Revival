@@ -1,56 +1,58 @@
 package net.zuperz.amber_revival;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.zuperz.amber_revival.block.ModBlocks;
-import net.zuperz.amber_revival.block.entity.ModBlockEntities;
-import net.zuperz.amber_revival.block.entity.renderer.AmberDisplayBlockEntityRenderer;
-import net.zuperz.amber_revival.entity.ModEntities;
-import net.zuperz.amber_revival.entity.client.RaptorRenderer;
-import net.zuperz.amber_revival.item.ModItems;
-import net.zuperz.amber_revival.item.ModCreativeModeTabs;
-import net.zuperz.amber_revival.recipe.ModRecipes;
-import net.zuperz.amber_revival.screen.FossilBreakerScreen;
-import net.zuperz.amber_revival.screen.ModMenuTypes;
-import org.slf4j.Logger;
-
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.zuperz.amber_revival.block.ModBlocks;
+import net.zuperz.amber_revival.block.entity.ModBlockEntities;
+import net.zuperz.amber_revival.block.entity.renderer.AmberDisplayBlockEntityRenderer;
+import net.zuperz.amber_revival.entity.ModEntities;
+import net.zuperz.amber_revival.entity.client.RaptorRenderer;
+import net.zuperz.amber_revival.item.ModCreativeModeTabs;
+import net.zuperz.amber_revival.item.ModItems;
+import net.zuperz.amber_revival.screen.FossilBreakerScreen;
+import net.zuperz.amber_revival.screen.ModMenuTypes;
+import net.zuperz.amber_revival.sound.ModSounds;
+import org.slf4j.Logger;
 
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(AmberRevival.MOD_ID)
 public class AmberRevival {
-    public static final String MOD_ID = "amber_recival";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    // Define mod id in a common place for everything to reference
+    public static final String MOD_ID = "amber_revival";
+    // Directly reference a slf4j logger
+    private static final Logger LOGGER = LogUtils.getLogger();
 
+    // The constructor for the mod class is the first code that is run when your mod is loaded.
+    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public AmberRevival(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
 
         ModCreativeModeTabs.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
 
-        ModRecipes.register(modEventBus);
-        ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
-
+        ModBlockEntities.register(modEventBus);
         ModEntities.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
@@ -58,28 +60,18 @@ public class AmberRevival {
         NeoForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
+        //modEventBus.addListener(this::addCreative);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        // Register the commonSetup method for modloading
+        //modEventBus.addListener(this::commonSetup);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("HELLO FROM COMMON SETUP");
-
-        if (Config.logDirtBlock)
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-
+    // Add the example block item to the building blocks tab
+    /*private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
         }
     }
+     */
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

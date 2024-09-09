@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "amber_recival:item/small_amber",
-    "layer1": "amber_recival:item/slime_amber"
-  }
-}

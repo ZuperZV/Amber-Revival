@@ -1,0 +1,10 @@
+{
+  "ward_cut": {
+    "sounds": [
+      {
+        "name": "amber_revival:ward_cut",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "amber_revival:raptor_chops"
+  },
+  "result": {
+    "count": 1,
+    "id": "amber_revival:cooked_raptor_chops"
+  }
+}

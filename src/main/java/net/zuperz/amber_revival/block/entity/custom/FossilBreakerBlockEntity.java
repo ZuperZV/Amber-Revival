@@ -1,10 +1,14 @@
 package net.zuperz.amber_revival.block.entity.custom;
 
+import cpw.mods.util.Lazy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -21,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import net.zuperz.amber_revival.block.entity.ModBlockEntities;
 import net.zuperz.amber_revival.recipe.FossilBreakerRecipe;
 import net.zuperz.amber_revival.recipe.ItemHandlerRecipeInput;
@@ -29,183 +34,107 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.Random;
 
-public class FossilBreakerBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged(); // Mark the block entity as changed whenever the contents change
+public class FossilBreakerBlockEntity extends BlockEntity {
+    private final ItemStackHandler inputItems = createItemHandler(1);
+    private final ItemStackHandler outputItems = createItemHandler(1);
+
+    // MAKE SURE TO USE net.neoforged.neoforge.common.util.Lazy and not the CPW package, your game WILL CRASH otherwise
+    private final Lazy<IItemHandler> itemHandler = Lazy.of(() -> new CombinedInvWrapper(inputItems, outputItems));
+    private final Lazy<IItemHandler> inputItemHandler = Lazy.of(() -> new CustomItemHandler(inputItems));
+    private final Lazy<IItemHandler> outputItemHandler = Lazy.of(() -> new CustomItemHandler(outputItems));
+
+
+    private int myInt = 0;
+    public FossilBreakerBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.FOSSIL_BREAKER_BE.get(), pos, state);
+    }
+
+    public void tickServer() {
+        // Ticking logic
+
+        Random r = new Random();
+        myInt = r.nextInt(0, 10); // Just as an example
+        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0); // IMPORTANT
+    }
+
+    public void dropItems() {
+        SimpleContainer inventory = new SimpleContainer(itemHandler.get().getSlots());
+        for (int i = 0; i < itemHandler.get().getSlots(); i++) {
+            inventory.setItem(i, itemHandler.get().getStackInSlot(i));
         }
+        Containers.dropContents(level, worldPosition, inventory);
+    }
 
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return switch (slot) {
-                case 0, 1 -> true;
-                case 2 -> false;
-                default -> super.isItemValid(slot, stack);
-            };
-        }
-    };
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        // you can also do stuff like tag.putInt("my_key", int)
+        tag.putInt("fossil_block_entity.my_int", myInt);
+        tag.put("fossil_block_entity.inputs", inputItems.serializeNBT(registries));
+        tag.put("fossil_block_entity.outputs", outputItems.serializeNBT(registries));
+    }
 
-    private static final int INPUT_SLOT = 0;
-    private static final int INPUT_SLOT_2 = 1;
-    private static final int OUTPUT_SLOT = 2;
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        // you can also do stuff like myInt = tag.gettInt("my_key");
+        myInt = tag.getInt("fossil_block_entity.my_int");
+        if (tag.contains("fossil_block_entity.inputs"))
+            inputItems.deserializeNBT(registries, tag.getCompound("fossil_block_entity.inputs"));
 
-    protected final ContainerData data;
-    private int progress = 0;
-    private int maxProgress = 78;
+        if (tag.contains("fossil_block_entity.inputs"))
+            outputItems.deserializeNBT(registries, tag.getCompound("fossil_block_entity.outputs"));
+    }
 
-    public FossilBreakerBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.FOSSIL_BREAKER_BE.get(), pPos, pBlockState);
-        this.data = new ContainerData() {
+    private ItemStackHandler createItemHandler(int slots) {
+        return new ItemStackHandler(slots) {
             @Override
-            public int get(int pIndex) {
-                return switch (pIndex) {
-                    case 0 -> FossilBreakerBlockEntity.this.progress;
-                    case 1 -> FossilBreakerBlockEntity.this.maxProgress;
-                    default -> 0;
-                };
-            }
-
-            @Override
-            public void set(int pIndex, int pValue) {
-                switch (pIndex) {
-                    case 0 -> FossilBreakerBlockEntity.this.progress = pValue;
-                    case 1 -> FossilBreakerBlockEntity.this.maxProgress = pValue;
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 3;
+            protected void onContentsChanged(int slot) {
+                setChanged();
             }
         };
     }
 
-    public void drops() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
-        }
-
-        Containers.dropContents(this.level, this.worldPosition, inventory);
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        saveAdditional(tag, registries);
+        return tag;
     }
 
     @Override
-    public Component getDisplayName() {
-        return Component.literal("Rotten Cauldron");
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        loadAdditional(tag, lookupProvider);
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new FossilBreakerMenu(containerId, playerInventory, this, this.data);
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public @Nullable IItemHandler getItemHandlerCapability(@Nullable Direction side) {
-        if (side == null)
-            return itemHandler;
 
+    public Lazy<IItemHandler> getItemHandler() {
         return itemHandler;
     }
 
-    public IItemHandler getItemHandler() {
-        return this.itemHandler;
+    public ItemStackHandler getInputItems() {
+        return inputItems;
     }
 
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        setChanged();
-        if (!level.isClientSide()) {
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-        }
-
+    public ItemStackHandler getOutputItems() {
+        return outputItems;
     }
 
-    @Override
-    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
-        nbt.put("inventory", itemHandler.serializeNBT(lookup));
-        nbt.putInt("fossil_breaker.progress", this.progress);
-        super.saveAdditional(nbt, lookup);
+    public Lazy<IItemHandler> getInputItemHandler() {
+        return inputItemHandler;
+    }
+    public Lazy<IItemHandler> getOutputItemHandler() {
+        return outputItemHandler;
     }
 
-    @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
-        super.loadAdditional(nbt, lookup);
-        itemHandler.deserializeNBT(lookup, nbt.getCompound("inventory"));
-        progress = nbt.getInt("fossil_breaker.progress");
-        setChanged();
-    }
-
-    public void tick(Level level, BlockPos pPos, BlockState pState) {
-        if (isOutputSlotEmptyOrReceivable() && hasRecipe()) {
-            increaseCraftingProcess();
-            setChanged(level, pPos, pState);
-
-            if (hasProgressFinished()) {
-                craftItem();
-                resetProgress();
-            }
-        } else {
-            resetProgress();
-        }
-    }
-
-    private void craftItem() {
-        Optional<FossilBreakerRecipe> recipe = getCurrentRecipe();
-        ItemStack resultItem = recipe.get().getResultItem(getLevel().registryAccess());
-
-        this.itemHandler.extractItem(INPUT_SLOT, 1, false);
-
-        this.itemHandler.extractItem(INPUT_SLOT_2, 1, false);
-
-        this.itemHandler.setStackInSlot(OUTPUT_SLOT, new ItemStack(resultItem.getItem(),
-                this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + resultItem.getCount()));
-    }
-
-    private void resetProgress() {
-        this.progress = 0;
-    }
-
-    private boolean hasProgressFinished() {
-        return this.progress >= this.maxProgress;
-    }
-
-    private void increaseCraftingProcess() {
-        this.progress++;
-    }
-
-    private boolean hasRecipe() {
-        Optional<FossilBreakerRecipe> recipe = getCurrentRecipe();
-
-        if (recipe.isEmpty()) {
-            return false;
-        }
-        ItemStack resultItem = recipe.get().getResultItem(getLevel().registryAccess());
-
-        return canInsertAmountIntoOutputSlot(resultItem.getCount())
-                && canInsertItemIntoOutputSlot(resultItem.getItem());
-    }
-
-    private Optional<FossilBreakerRecipe> getCurrentRecipe() {
-        ItemHandlerRecipeInput recipeInput = new ItemHandlerRecipeInput(this.itemHandler);
-        Optional<RecipeHolder<FossilBreakerRecipe>> recipeHolder = this.level.getRecipeManager().getRecipeFor(FossilBreakerRecipe.Type.INSTANCE, recipeInput, level);
-
-        // Extract the HardAnvilRecipe from the RecipeHolder
-        return recipeHolder.map(RecipeHolder::value);
-    }
-
-    private boolean canInsertItemIntoOutputSlot(Item item) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).isEmpty() || this.itemHandler.getStackInSlot(OUTPUT_SLOT).is(item);
-    }
-
-    private boolean canInsertAmountIntoOutputSlot(int count) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).getMaxStackSize() >=
-                this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + count;
-    }
-
-    private boolean isOutputSlotEmptyOrReceivable() {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).isEmpty() ||
-                this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() < this.itemHandler.getStackInSlot(OUTPUT_SLOT).getMaxStackSize();
+    public int getMyInt() {
+        return myInt;
     }
 }

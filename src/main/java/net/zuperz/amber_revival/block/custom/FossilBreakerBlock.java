@@ -2,11 +2,15 @@ package net.zuperz.amber_revival.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -26,114 +30,61 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zuperz.amber_revival.block.entity.ModBlockEntities;
 import net.zuperz.amber_revival.block.entity.custom.FossilBreakerBlockEntity;
+import net.zuperz.amber_revival.screen.FossilBreakerMenu;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FossilBreakerBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape INSIDE = box(2.0, 4.0, 2.0, 14.0, 16.0, 14.0);
-    protected static final VoxelShape SHAPE;
-
-    static {
-        SHAPE = Shapes.join(Shapes.block(), Shapes.or(box(0.0, 0.0, 4.0, 16.0, 3.0, 12.0), new VoxelShape[]{box(4.0, 0.0, 0.0, 12.0, 3.0, 16.0), box(2.0, 0.0, 2.0, 14.0, 3.0, 14.0), INSIDE}), BooleanOp.ONLY_FIRST);
-    }
-
-    public FossilBreakerBlock(Properties pProperties) {
-        super(pProperties);
+public class FossilBreakerBlock extends Block implements EntityBlock {
+    public static final String SCREEN_MY_BLOCK = "amber_revival.screen.fossil_breaker_block";
+    public FossilBreakerBlock() {
+        super(Properties.of());
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
-    }
-
-
-    public BlockState rotate(BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
-    }
-
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
-        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
-    }
-    @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE;
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new FossilBreakerBlockEntity(pos, state);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING);
-    }
-
-    /* BLOCK ENTITY */
-
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide) return null;
+        return (lvl, pos, st, blockEntity) -> {
+            if (blockEntity instanceof FossilBreakerBlockEntity BlockEntity) {
+                BlockEntity.tickServer();
+            }
+        };
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (pState.getBlock() != pNewState.getBlock()) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof FossilBreakerBlockEntity) {
-                ((FossilBreakerBlockEntity) blockEntity).drops();
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            if (level.getBlockEntity(pos) instanceof FossilBreakerBlockEntity tile) {
+                MenuProvider containerProvider = new MenuProvider() {
+                    @Override
+                    public Component getDisplayName() {
+                        return Component.translatable(SCREEN_MY_BLOCK);
+                    }
+
+                    @Override
+                    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+                        return new FossilBreakerMenu(containerId, player, pos);
+                    }
+                };
+                player.openMenu(containerProvider, buf -> buf.writeBlockPos(pos));
+            } else {
+                throw new IllegalStateException("Named container provider is missing");
             }
         }
-
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
-    public @NotNull ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult) {
-        if (pLevel.isClientSide) {
-            return ItemInteractionResult.SUCCESS;
-        } else {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof FossilBreakerBlockEntity) {
-                pPlayer.openMenu((FossilBreakerBlockEntity) blockentity);
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (state.getBlock() != newState.getBlock()) {
+            if (level.getBlockEntity(pos) instanceof FossilBreakerBlockEntity furnace) {
+                furnace.dropItems();
             }
-
-            return ItemInteractionResult.CONSUME;
         }
-    }
-
-    @Override
-    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult) {
-        if (pLevel.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof FossilBreakerBlockEntity) {
-                pPlayer.openMenu((FossilBreakerBlockEntity) blockentity);
-            }
-
-            return InteractionResult.CONSUME;
-        }
-    }
-
-
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new FossilBreakerBlockEntity(pPos, pState);
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if(pLevel.isClientSide()) {
-            return null;
-        }
-
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.FOSSIL_BREAKER_BE.get(),
-                (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

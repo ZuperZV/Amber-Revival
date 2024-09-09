@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "amber_revival:block/amber_display",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "amber_revival:block/amber_display"
+    },
+    "facing=south": {
+      "model": "amber_revival:block/amber_display",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "amber_revival:block/amber_display",
+      "y": 270
+    }
+  }
+}

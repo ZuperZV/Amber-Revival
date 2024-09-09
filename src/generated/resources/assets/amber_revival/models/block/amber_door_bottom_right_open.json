@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/door_bottom_right_open",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bottom": "amber_revival:block/amber_door_bottom",
+    "top": "amber_revival:block/amber_door_top"
+  }
+}

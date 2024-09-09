@@ -1,6 +1,7 @@
 {
   "values": [
-    "amber_recival:amber_display",
-    "amber_recival:amber_sand_ore"
+    "amber_revival:amber_display",
+    "amber_revival:amber_sand_ore",
+    "amber_revival:fossil_breaker"
   ]
 }

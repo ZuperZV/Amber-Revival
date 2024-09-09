@@ -42,7 +42,11 @@ public class RaptorHeldItemLayer extends RenderLayer<RaptorEntity, RaptorModel<R
             pPoseStack.translate(0.0F, 0.5F, 0.209375F);
         }
 
-        pPoseStack.translate(0.0F, 0.56F, -0.58F);
+        if (pLivingEntity.isInSittingPose()) {
+            pPoseStack.translate(0.0F, 0.15F, -0.2);
+        }
+
+        pPoseStack.translate(0.0F, 0.56F, -0.6F);
 
         RaptorModel<RaptorEntity> model = this.getParentModel();
         model.head.translateAndRotate(pPoseStack);

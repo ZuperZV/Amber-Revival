@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.15,
+  "ingredient": {
+    "item": "amber_revival:amber"
+  },
+  "result": {
+    "count": 1,
+    "id": "amber_revival:amber_ingot"
+  }
+}

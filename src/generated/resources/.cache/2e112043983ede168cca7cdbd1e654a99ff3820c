@@ -1,5 +1,0 @@
-// 1.21	2024-08-18T17:35:39.5352277	Tags for minecraft:block mod id amber_recival
-0f43275f10af76621d00a9a23959e6acf67c6bd3 data/minecraft/tags/block/mineable/pickaxe.json
-8e34913fe9ae9d9c2bb19ccb613c9cd3afa63f34 data/minecraft/tags/block/mineable/shovel.json
-8e34913fe9ae9d9c2bb19ccb613c9cd3afa63f34 data/minecraft/tags/block/needs_iron_tool.json
-065d38d3ee6787943e1ef759799fea4d9b350768 data/minecraft/tags/block/needs_stone_tool.json

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "amber_revival:block/amber_slab"
+    },
+    "type=double": {
+      "model": "amber_revival:block/amber_planks"
+    },
+    "type=top": {
+      "model": "amber_revival:block/amber_slab_top"
+    }
+  }
+}

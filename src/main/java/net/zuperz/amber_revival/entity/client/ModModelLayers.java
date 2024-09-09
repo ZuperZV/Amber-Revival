@@ -8,4 +8,7 @@ public class ModModelLayers {
     public static final ModelLayerLocation RAPTOR = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "raptor"), "main");
 
+    public static final ModelLayerLocation RAPTOR_ARMOR = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "raptor_armor"), "armor");
+
 }

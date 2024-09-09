@@ -1,0 +1,68 @@
+{
+  "creativetab.amber_revival.amber_revival_tab": "Amber Revival",
+
+  "tooltip.amber_revival.amber_tier.tooltip": "Tier: ",
+
+  "tooltip.amber_revival.resin.tooltip.shift": "Press §eShift§r for more Information!",
+  "tooltip.amber_revival.resin.tooltip.1": "Captures mob data",
+  "tooltip.amber_revival.resin.tooltip.2": "§oRight-click to transform into Amber§r",
+
+  "item.amber_revival.amber": "Amber",
+  "item.amber_revival.amber_ingot": "Amber Ingot",
+  "item.amber_revival.resin": "Resin",
+  "item.amber_revival.resin_pickaxe": "Resin Pickaxe",
+
+  "block.amber_revival.amber_display": "Amber Display",
+  "block.amber_revival.amber_sand_ore": "Amber Sand Ore",
+  "block.amber_revival.fossil_breaker": "Fossil Breaker",
+
+  "item.amber_revival.slime_amber": "Amber Encased Slime",
+  "item.amber_revival.amber_raptor_skull": "Amber Encased Raptor Skull",
+  "item.amber_revival.spider_amber": "Amber Encased Spider",
+  "item.amber_revival.amber_axolotl": "Amber Encased Axolotl",
+  
+  "block.amber_revival.amber_log": "Amber Log",
+  "block.amber_revival.amber_wood": "Amber Wood",
+  "block.amber_revival.stripped_amber_log": "Stripped Amber Log",
+  "block.amber_revival.stripped_amber_wood": "Stripped Amber Wood",
+  "block.amber_revival.amber_planks": "Amber Planks",
+  "block.amber_revival.amber_leaves": "Amber Leaves",
+  "block.amber_revival.amber_sapling": "Amber Sapling",
+
+  "block.amber_revival.resin_amber_log": "Resin Amber Log",
+
+  "block.amber_revival.amber_stairs": "Amber Stairs",
+  "block.amber_revival.amber_slab": "Amber Slab",
+
+  "block.amber_revival.amber_fence": "Amber Fence",
+  "block.amber_revival.amber_fence_gate": "Amber Fence Gate",
+
+  "block.amber_revival.amber_pressure_plate": "Amber Pressure Plate",
+  "block.amber_revival.amber_button": "Amber button",
+
+  "block.amber_revival.amber_door": "Amber Pressure Door",
+  "block.amber_revival.amber_trapdoor": "Amber Trapdoor",
+
+  "block.amber_revival.amber_sign": "Amber sign",
+  "block.amber_revival.amber_hanging_sign": "Amber Hanging Sign",
+
+  "item.amber_revival.cooked_raptor_chops": "Cooked Raptor Chops",
+  "item.amber_revival.raptor_chops": "Raptor Chops",
+
+
+  "item.amber_revival.raptor_skull": "Raptor Skull",
+  "item.amber_revival.raptor_spawn_egg": "Raptor Spawn Egg",
+  "entity.amber_revival.raptor": "Raptor",
+
+  "entity.amber_revival.raptor_feaher": "Raptor Feaher",
+
+  "block.amber_revival.resin_furnace": "Resin Furnace",
+
+  "item.amber_revival.ward_cut_music_disc": "Ward Cut Music Disc",
+  "item.amber_revival.ward_cut_music_disc.desc": "C418 - Ward Cut",
+
+  "item.minecraft.potion.effect.harden_potion": "Harden Potion",
+  "item.minecraft.splash_potion.effect.harden_potion": "Harden Splash Potion",
+  "item.minecraft.lingering_potion.effect.harden_potion": "Harden Lingering Potion",
+  "item.minecraft.tipped_arrow.effect.harden_potion": "Harden Tipped Arrow"
+}

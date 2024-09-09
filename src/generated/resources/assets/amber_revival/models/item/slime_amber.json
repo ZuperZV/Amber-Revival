@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "amber_revival:item/small_amber",
+    "layer1": "amber_revival:item/slime_amber"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "amber_revival:item/big_amber",
+    "layer1": "amber_revival:item/amber_raptor_skull"
+  }
+}

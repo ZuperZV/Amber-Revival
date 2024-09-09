@@ -1,0 +1,8 @@
+// 1.21	2024-08-31T15:02:59.0673485	Tags for minecraft:block mod id amber_revival
+1192fe844ce35e8cabccbdeb681cf4a30bab26e7 data/minecraft/tags/block/fences.json
+cb4b79c9a1327c6443d64318d72faaa3700cad2d data/minecraft/tags/block/fence_gates.json
+57e2e9b5c0560bf07999a9107e60adcbd4f4e9d5 data/minecraft/tags/block/mineable/axe.json
+659cabea9053abd2fee97a254bfd6373216b37a9 data/minecraft/tags/block/mineable/pickaxe.json
+210f2fb9b1e8555c5264c7a8dbb64f428800255f data/minecraft/tags/block/mineable/shovel.json
+210f2fb9b1e8555c5264c7a8dbb64f428800255f data/minecraft/tags/block/needs_iron_tool.json
+4dc5b23584a637af1205b36c40e311ddb7c541c3 data/minecraft/tags/block/needs_stone_tool.json

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "amber_recival:block/amber_sand_ore"
-  }
-}

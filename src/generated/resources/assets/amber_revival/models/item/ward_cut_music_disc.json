@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "amber_revival:item/ward_cut_music_disc"
+  }
+}

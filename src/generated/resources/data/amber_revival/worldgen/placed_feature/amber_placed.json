@@ -1,0 +1,29 @@
+{
+  "feature": "amber_revival:amber",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 600
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": [
+          "minecraft:dirt",
+          "minecraft:grass_block"
+        ]
+      }
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING_NO_LEAVES"
+    }
+  ]
+}

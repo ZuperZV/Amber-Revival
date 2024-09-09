@@ -14,6 +14,8 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.zuperz.amber_revival.AmberRevival;
 
 public class ModBiomeModifiers {
+    public static final ResourceKey<BiomeModifier> ADD_TREE_AMBER = registerKey("add_tree_amber");
+
     public static final ResourceKey<BiomeModifier> ADD_AMBER_SAND_ORE = registerKey("add_amber_sand_ore");
 
 
@@ -25,6 +27,12 @@ public class ModBiomeModifiers {
                 biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                 HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.AMBER_SAND_ORE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
+
+
+        context.register(ADD_TREE_AMBER, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.AMBER_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
     }
 
 

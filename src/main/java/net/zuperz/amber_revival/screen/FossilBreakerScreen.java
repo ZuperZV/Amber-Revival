@@ -14,8 +14,8 @@ public class FossilBreakerScreen extends AbstractContainerScreen<FossilBreakerMe
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(AmberRevival.MOD_ID, "textures/gui/fossil_breaker_gui.png");
 
-    public FossilBreakerScreen(FossilBreakerMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+    public FossilBreakerScreen(FossilBreakerMenu container, Inventory inventory, Component title) {
+        super(container, inventory, title);
     }
 
     @Override
@@ -41,14 +41,15 @@ public class FossilBreakerScreen extends AbstractContainerScreen<FossilBreakerMe
 
         guiGraphics.blit(TEXTURE,x, y, 0, 0, imageWidth, imageHeight);
 
-        renderProgressArrow(guiGraphics, x, y);
+        //renderProgressArrow(guiGraphics, x, y);
     }
 
-    private void renderProgressArrow(GuiGraphics pGuiGraphics, int x, int y) {
+    /*private void renderProgressArrow(GuiGraphics pGuiGraphics, int x, int y) {
         if(menu.isCrafting()) {
             pGuiGraphics.blit(TEXTURE,x + 105, y + 33, 176, 0, 8, menu.getScaledProgress());
         }
     }
+     */
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
